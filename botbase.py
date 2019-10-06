@@ -24,41 +24,34 @@ class BetterBot(sc2.BotAI):
 
     def __init__(self):
         super().__init__()
-        self.target_mineral_income = 5*16
-        self.target_gas_income = 5*6
-        self.mineral_per_worker = 5
-        self.gas_per_worker = 5
+        self.mineral_per_worker = 5 # generates 5 minerals at 5 second intervals
+        self.gas_per_worker = 4 # generates 4 gas at 4 second intervals
         self.workers_per_geyser = 3
+        self._build_req = {CYBERNETICSCORE:GATEWAY, PHOTONCANNON:FORGE, SHIELDBATTERY:CYBERNETICSCORE,
+        TWILIGHTCOUNCIL:CYBERNETICSCORE, STARGATE:CYBERNETICSCORE,
+        TWILIGHTCOUNCIL:CYBERNETICSCORE, ROBOTICSFACILITY:CYBERNETICSCORE,
+        TEMPLARARCHIVE:TWILIGHTCOUNCIL, DARKSHRINE:TWILIGHTCOUNCIL, FLEETBEACON:STARGATE,
+        ROBOTICSBAY:ROBOTICSFACILITY}
 
-    def valid_build_permit(self, unit):
+    def get_permit_requirements(self, unit):
+        """
+        Given a building
+        Returns the type of building required to build the specified one, None if no requirement
+        """
+        return self._build_req[unit] if unit in self._build_req else None
+
+    def valid_build_permit(self, unit, include_in_progress=False):
         """
         Given a building
         Returns true if all prerequasite buildings are finished building
         """
-        if unit == CYBERNETICSCORE:
-            return len(self.units(GATEWAY).owned.ready) > 0
-        elif unit == PHOTONCANNON:
-            return len(self.units(FORGE).owned.ready) > 0
-        elif unit == SHIELDBATTERY:
-            return len(self.units(CYBERNETICSCORE).owned.ready) > 0
-        elif unit == TWILIGHTCOUNCIL:
-            return len(self.units(CYBERNETICSCORE).owned.ready) > 0
-        elif unit == STARGATE:
-            return len(self.units(CYBERNETICSCORE).owned.ready) > 0
-        elif unit == TWILIGHTCOUNCIL:
-            return len(self.units(CYBERNETICSCORE).owned.ready) > 0
-        elif unit == ROBOTICSFACILITY:
-            return len(self.units(CYBERNETICSCORE).owned.ready) > 0
-        elif unit == TEMPLARARCHIVE:
-            return len(self.units(TWILIGHTCOUNCIL).owned.ready) > 0
-        elif unit == DARKSHRINE:
-            return len(self.units(TWILIGHTCOUNCIL).owned.ready) > 0
-        elif unit == FLEETBEACON:
-            return len(self.units(STARGATE).owned.ready) > 0
-        elif unit == ROBOTICSBAY:
-            return len(self.units(ROBOTICSFACILITY).owned.ready) > 0
-
-        return True
+        req = self.get_permit_requirements(unit)
+        if req == None:
+            return True
+        elif include_in_progress:
+            return len(self.units(req).owned.ready) + self.already_pending(req) > 0
+        else:
+            return len(self.units(req).owned.ready) > 0
 
     ##########################################################
     # THE BELLOW ARE SLIGHTLY MODIFIED VERSIONS OF sc2.BotAI #
