@@ -3,6 +3,7 @@ from botbase import BetterBot as BotBase
 from sc2 import run_game, maps, Race, Difficulty
 from sc2.player import Bot, Computer
 from sc2.constants import *
+
 class WabaBot(BotBase):
 
     def __init__(self):
@@ -19,6 +20,7 @@ class WabaBot(BotBase):
     async def on_step(self, iteration):
         # what to do every step
         await self.distribute_workers()  # in sc2/bot_ai.py
+
         if iteration % 10 == 0:
             if len(self.build_order) + len(self.ideal_build_path) == 0:
                 if self.supply_left < 5 and not self.already_pending(PYLON):
@@ -29,8 +31,6 @@ class WabaBot(BotBase):
                             if self.can_afford(COLOSSUS):
                                 await self.do(rf.train(COLOSSUS))
             else:
-                if len(self.build_order) == 1:
-                    print(self.build_order)
                 await self.build_in_order()
             await self.build_upgrades()
             await self.aquire_income()
@@ -53,11 +53,14 @@ class WabaBot(BotBase):
                 else:
                     location = self.getLocation(self.build_order[0])
                     if not location is None and self.valid_build_permit(self.build_order[0]):
-                        r = None
+                        failures = []
                         if self.build_order[0] == PYLON:# and self.target_owned_buildings[PYLON] == 1:
-                            r = await self.build(self.build_order[0], near=location, min_distance=10, max_distance=11)
+                            failures = await self.build(self.build_order[0], near=location, min_distance=10, max_distance=11)
                         else:
-                            r = await self.build(self.build_order[0], near=location)
+                            failures = await self.build(self.build_order[0], near=location)
+                        if failures:
+                            print("failed to build, did not increment")
+                            return False
                         self.increment_order()
                         return True
         else:

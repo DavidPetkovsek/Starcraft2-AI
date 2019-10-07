@@ -20,18 +20,28 @@ from sc2.position import Point2, Point3
 from sc2.unit import Unit
 from sc2.units import Units
 
+"""
+This is a list of the possible values from ActionResult
+['Success', 'NotSupported', 'Error', 'CantQueueThatOrder', 'Retry', 'Cooldown', 'QueueIsFull', 'RallyQueueIsFull', 'NotEnoughMinerals', 'NotEnoughVespene', 'NotEnoughTerrazine', 'NotEnoughCustom', 'NotEnoughFood', 'FoodUsageImpossible', 'NotEnoughLife', 'NotEnoughShields', 'NotEnoughEnergy', 'LifeSuppressed', 'ShieldsSuppressed', 'EnergySuppressed', 'NotEnoughCharges', 'CantAddMoreCharges', 'TooMuchMinerals', 'TooMuchVespene', 'TooMuchTerrazine', 'TooMuchCustom', 'TooMuchFood', 'TooMuchLife', 'TooMuchShields', 'TooMuchEnergy', 'MustTargetUnitWithLife', 'MustTargetUnitWithShields', 'MustTargetUnitWithEnergy', 'CantTrade', 'CantSpend', 'CantTargetThatUnit', 'CouldntAllocateUnit', 'UnitCantMove', 'TransportIsHoldingPosition', 'BuildTechRequirementsNotMet', 'CantFindPlacementLocation', 'CantBuildOnThat', 'CantBuildTooCloseToDropOff', 'CantBuildLocationInvalid', 'CantSeeBuildLocation', 'CantBuildTooCloseToCreepSource', 'CantBuildTooCloseToResources', 'CantBuildTooFarFromWater', 'CantBuildTooFarFromCreepSource', 'CantBuildTooFarFromBuildPowerSource', 'CantBuildOnDenseTerrain', 'CantTrainTooFarFromTrainPowerSource', 'CantLandLocationInvalid', 'CantSeeLandLocation', 'CantLandTooCloseToCreepSource', 'CantLandTooCloseToResources', 'CantLandTooFarFromWater', 'CantLandTooFarFromCreepSource', 'CantLandTooFarFromBuildPowerSource', 'CantLandTooFarFromTrainPowerSource', 'CantLandOnDenseTerrain', 'AddOnTooFarFromBuilding', 'MustBuildRefineryFirst', 'BuildingIsUnderConstruction', 'CantFindDropOff', 'CantLoadOtherPlayersUnits', 'NotEnoughRoomToLoadUnit', 'CantUnloadUnitsThere', 'CantWarpInUnitsThere', 'CantLoadImmobileUnits', 'CantRechargeImmobileUnits', 'CantRechargeUnderConstructionUnits', 'CantLoadThatUnit', 'NoCargoToUnload', 'LoadAllNoTargetsFound', 'NotWhileOccupied', 'CantAttackWithoutAmmo', 'CantHoldAnyMoreAmmo', 'TechRequirementsNotMet', 'MustLockdownUnitFirst', 'MustTargetUnit', 'MustTargetInventory', 'MustTargetVisibleUnit', 'MustTargetVisibleLocation', 'MustTargetWalkableLocation', 'MustTargetPawnableUnit', 'YouCantControlThatUnit', 'YouCantIssueCommandsToThatUnit', 'MustTargetResources', 'RequiresHealTarget', 'RequiresRepairTarget', 'NoItemsToDrop', 'CantHoldAnyMoreItems', 'CantHoldThat', 'TargetHasNoInventory', 'CantDropThisItem', 'CantMoveThisItem', 'CantPawnThisUnit', 'MustTargetCaster', 'CantTargetCaster', 'MustTargetOuter', 'CantTargetOuter', 'MustTargetYourOwnUnits', 'CantTargetYourOwnUnits', 'MustTargetFriendlyUnits', 'CantTargetFriendlyUnits', 'MustTargetNeutralUnits', 'CantTargetNeutralUnits', 'MustTargetEnemyUnits', 'CantTargetEnemyUnits', 'MustTargetAirUnits', 'CantTargetAirUnits', 'MustTargetGroundUnits', 'CantTargetGroundUnits', 'MustTargetStructures', 'CantTargetStructures', 'MustTargetLightUnits', 'CantTargetLightUnits', 'MustTargetArmoredUnits', 'CantTargetArmoredUnits', 'MustTargetBiologicalUnits', 'CantTargetBiologicalUnits', 'MustTargetHeroicUnits', 'CantTargetHeroicUnits', 'MustTargetRoboticUnits', 'CantTargetRoboticUnits', 'MustTargetMechanicalUnits', 'CantTargetMechanicalUnits', 'MustTargetPsionicUnits', 'CantTargetPsionicUnits', 'MustTargetMassiveUnits', 'CantTargetMassiveUnits', 'MustTargetMissile', 'CantTargetMissile', 'MustTargetWorkerUnits', 'CantTargetWorkerUnits', 'MustTargetEnergyCapableUnits', 'CantTargetEnergyCapableUnits', 'MustTargetShieldCapableUnits', 'CantTargetShieldCapableUnits', 'MustTargetFlyers', 'CantTargetFlyers', 'MustTargetBuriedUnits', 'CantTargetBuriedUnits', 'MustTargetCloakedUnits', 'CantTargetCloakedUnits', 'MustTargetUnitsInAStasisField', 'CantTargetUnitsInAStasisField', 'MustTargetUnderConstructionUnits', 'CantTargetUnderConstructionUnits', 'MustTargetDeadUnits', 'CantTargetDeadUnits', 'MustTargetRevivableUnits', 'CantTargetRevivableUnits', 'MustTargetHiddenUnits', 'CantTargetHiddenUnits', 'CantRechargeOtherPlayersUnits', 'MustTargetHallucinations', 'CantTargetHallucinations', 'MustTargetInvulnerableUnits', 'CantTargetInvulnerableUnits', 'MustTargetDetectedUnits', 'CantTargetDetectedUnits', 'CantTargetUnitWithEnergy', 'CantTargetUnitWithShields', 'MustTargetUncommandableUnits', 'CantTargetUncommandableUnits', 'MustTargetPreventDefeatUnits', 'CantTargetPreventDefeatUnits', 'MustTargetPreventRevealUnits', 'CantTargetPreventRevealUnits', 'MustTargetPassiveUnits', 'CantTargetPassiveUnits', 'MustTargetStunnedUnits', 'CantTargetStunnedUnits', 'MustTargetSummonedUnits', 'CantTargetSummonedUnits', 'MustTargetUser1', 'CantTargetUser1', 'MustTargetUnstoppableUnits', 'CantTargetUnstoppableUnits', 'MustTargetResistantUnits', 'CantTargetResistantUnits', 'MustTargetDazedUnits', 'CantTargetDazedUnits', 'CantLockdown', 'CantMindControl', 'MustTargetDestructibles', 'CantTargetDestructibles', 'MustTargetItems', 'CantTargetItems', 'NoCalldownAvailable', 'WaypointListFull', 'MustTargetRace', 'CantTargetRace', 'MustTargetSimilarUnits', 'CantTargetSimilarUnits', 'CantFindEnoughTargets', 'AlreadySpawningLarva', 'CantTargetExhaustedResources', 'CantUseMinimap', 'CantUseInfoPanel', 'OrderQueueIsFull', 'CantHarvestThatResource', 'HarvestersNotRequired', 'AlreadyTargeted', 'CantAttackWeaponsDisabled', 'CouldntReachTarget', 'TargetIsOutOfRange', 'TargetIsTooClose', 'TargetIsOutOfArc', 'CantFindTeleportLocation', 'InvalidItemClass', 'CantFindCancelOrder']
+"""
+
 class BetterBot(sc2.BotAI):
 
     def __init__(self):
         super().__init__()
+        self.square_side_length = 1
         self.mineral_per_worker = 5 # generates 5 minerals at 5 second intervals
         self.gas_per_worker = 4 # generates 4 gas at 4 second intervals
         self.workers_per_geyser = 3
+        self.pylon_build_radius = 7+0.25 # it is 7 but when doing math to ensure something fits increase it a little
         self._build_req = {CYBERNETICSCORE:GATEWAY, PHOTONCANNON:FORGE, SHIELDBATTERY:CYBERNETICSCORE,
         TWILIGHTCOUNCIL:CYBERNETICSCORE, STARGATE:CYBERNETICSCORE,
         TWILIGHTCOUNCIL:CYBERNETICSCORE, ROBOTICSFACILITY:CYBERNETICSCORE,
         TEMPLARARCHIVE:TWILIGHTCOUNCIL, DARKSHRINE:TWILIGHTCOUNCIL, FLEETBEACON:STARGATE,
         ROBOTICSBAY:ROBOTICSFACILITY}
+        self.building_size = {NEXUS:5, ASSIMILATOR:3, PYLON:2, GATEWAY:3, FORGE:3, CYBERNETICSCORE:3,
+        PHOTONCANNON:2, SHIELDBATTERY:2, TWILIGHTCOUNCIL:3, STARGATE:3, ROBOTICSFACILITY:3,
+        TEMPLARARCHIVE:3, FLEETBEACON:3, ROBOTICSBAY:3, DARKSHRINE:2}
 
     def get_permit_requirements(self, unit):
         """
@@ -52,6 +62,40 @@ class BetterBot(sc2.BotAI):
             return len(self.units(req).owned.ready) + self.already_pending(req) > 0
         else:
             return len(self.units(req).owned.ready) > 0
+
+    async def build_at(self, building, at, worker=None, detailed_failures=False):
+        """
+        Build the given building at the x,y coordinate of 'at'.
+        Where the x,y coordinate denotes the top left corner of the structure's grid.
+        Uses the given worker but by default will find the closest available worker.
+        Returns True on success False otherwise.
+        If detailed_failures is True (by default False) then it
+        returns the ActionResult of the build command. If no worker can be found
+        ActionResult.Error is returned.
+        """
+        if isinstance(at, Unit):
+            raise "must specify top left position to place building, not the position of a unit"
+        at[0] = int(at[0])
+        at[1] = int(at[1])
+        if building == None or at == None:
+            return False
+
+        placement = Point2([at[0]+self.building_size[building]/2, at[1]+self.building_size[building]/2])
+        worker = worker or self.select_build_worker(placement)
+
+        if worker is None:
+            if detailed_failures:
+                return ActionResult.Error
+            return False
+
+        res = self.do(worker.build(building, placement))
+
+        if detailed_failures:
+            return res
+
+        if res: # returns an empty list if successful otherwise list given contains list of errors
+            return False
+        return True
 
     ##########################################################
     # THE BELLOW ARE SLIGHTLY MODIFIED VERSIONS OF sc2.BotAI #
